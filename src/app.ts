@@ -6,6 +6,8 @@ import express from 'express';
 import helmet from 'helmet';
 import hpp from 'hpp';
 import { NODE_ENV, PORT } from '@/env';
+import { expressRouters } from '@/constants/routers';
+import dbConnect from '@/db';
 
 class App {
   public app: express.Application;
@@ -17,7 +19,14 @@ class App {
     this.env = NODE_ENV || 'development';
     this.port = PORT || 3000;
 
-    this.initializeMiddlewares();
+    dbConnect()
+      .then(() => {
+        this.initializeMiddlewares();
+        this.initializeRoutes();
+      })
+      .catch(e => {
+        console.error(e);
+      });
   }
 
   public async listen() {
@@ -25,7 +34,7 @@ class App {
       console.log(`=================================`);
       console.log(`======= ENV: ${this.env} =======`);
       console.log(`🚀 App listening on the port ${this.port}`);
-      console.log(`🎮 http://localhost:${this.port}/graphql`);
+      console.log(`🎮 http://localhost:${this.port}`);
       console.log(`=================================`);
     });
   }
@@ -40,11 +49,18 @@ class App {
       this.app.use(helmet());
     }
 
+    const middlewares = [compression(), express.json(), express.urlencoded({ extended: true }), cookieParser()];
+
+    middlewares.forEach(middleware => this.app.use(middleware));
     // this.app.use(cors({ origin: ORIGIN, credentials: CREDENTIALS }));
-    this.app.use(compression());
-    this.app.use(express.json());
-    this.app.use(express.urlencoded({ extended: true }));
-    this.app.use(cookieParser());
+  }
+
+  private initializeRoutes() {
+    expressRouters.forEach(_router => {
+      const { route, router } = _router;
+      this.app.use(route, router);
+    });
+    this.app;
   }
 }
 

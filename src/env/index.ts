@@ -1,3 +1,6 @@
+import { config } from 'dotenv';
 import { env } from 'process';
 
-export const { NODE_ENV, PORT } = env;
+config();
+
+export const { NODE_ENV, PORT, DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PWD } = env;
