@@ -1,10 +1,15 @@
 import DeliveryType from '@/interfaces/db/deliveryType';
 import OrderCart from '@/interfaces/db/orderCart';
-import { Moment } from 'moment-timezone';
 import { ObjectId } from 'mongoose';
+
+/**
+ * When you put some value to orderTime to create new document in bd just
+ * put @type {moment.Moment}
+ * get @type {number}
+ */
 interface IOrder {
   _id: ObjectId;
-  orderTime: string;
+  orderTime: Number;
   deliveryType: DeliveryType;
   name: string;
   phoneNumber: string;
@@ -20,7 +25,7 @@ interface IOrder {
   paymantType: string;
   totalCost: number;
   isPaid: boolean;
-  // orderCart: OrderCart;
+  orderCart: OrderCart;
 }
 
 export default IOrder;

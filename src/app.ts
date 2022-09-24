@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import compression from 'compression';
 import cookieParser from 'cookie-parser';
-// import cors from 'cors';
+import cors from 'cors';
 import express from 'express';
 import helmet from 'helmet';
 import hpp from 'hpp';
@@ -52,7 +52,7 @@ class App {
     const middlewares = [compression(), express.json(), express.urlencoded({ extended: true }), cookieParser()];
 
     middlewares.forEach(middleware => this.app.use(middleware));
-    // this.app.use(cors({ origin: ORIGIN, credentials: CREDENTIALS }));
+    this.app.use(cors({ origin: 'http://localhost:3000' }));
   }
 
   private initializeRoutes() {
