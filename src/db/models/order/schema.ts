@@ -1,23 +1,24 @@
-import { Schema, Types } from 'mongoose';
+import { Schema } from 'mongoose';
 import OrderInterface from './interface';
 
 const OrderSchema = new Schema<OrderInterface>({
-  orderTime: { type: Number, required: true },
-  name: { type: String, required: true },
-  phoneNumber: { type: String, required: true },
-  email: { type: String, required: true },
-  street: { type: String, required: true },
-  house: { type: String, required: true },
-  flat: { type: String, required: true },
-  entrance: { type: String, required: true },
-  intercomCode: { type: String, required: true },
-  floor: { type: Number, required: true },
-  comment: { type: String, required: true },
-  offCoupon: { type: String, required: true },
-  paymantType: { type: String, required: true },
-  totalCost: { type: Number, required: true },
-  isPaid: { type: Boolean, required: true },
-  orderCart: { type: Object, required: true },
+  selectedDeliveryType: String,
+  nameField: String,
+  phoneNumberField: String,
+  email: String,
+  street: String,
+  house: String,
+  flat: String,
+  entrance: String,
+  intercomCode: String,
+  floor: String,
+  comment: String,
+  date: Date,
+  coupon: String,
+  paymentType: String,
+  totalCost: String,
+  isPaid: Boolean,
+  cart: Object,
 });
 
 export default OrderSchema;

@@ -1,31 +1,11 @@
-import DeliveryType from '@/interfaces/db/deliveryType';
-import OrderCart from '@/interfaces/db/orderCart';
+import MapOfSelectedProducts from '@/types/reusableTypes/mapOfSelectedProducts';
+import OrderDetails from '@/types/reusableTypes/orderDetails';
 import { ObjectId } from 'mongoose';
 
-/**
- * When you put some value to orderTime to create new document in bd just
- * put @type {moment.Moment}
- * get @type {number}
- */
-interface IOrder {
+interface IOrder extends OrderDetails {
   _id: ObjectId;
-  orderTime: Number;
-  deliveryType: DeliveryType;
-  name: string;
-  phoneNumber: string;
-  email: string;
-  street: string;
-  house: string;
-  flat: string;
-  entrance: string;
-  intercomCode: string;
-  floor: Number;
-  comment: string;
-  offCoupon: string;
-  paymantType: string;
-  totalCost: number;
   isPaid: boolean;
-  orderCart: OrderCart;
+  cart: MapOfSelectedProducts;
 }
 
 export default IOrder;
