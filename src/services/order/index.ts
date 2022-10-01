@@ -16,6 +16,16 @@ class OrderService {
       throw APIError.unexpectedServerError('createOrder');
     }
   }
+
+  async getOrders() {
+    try {
+      const orders = await Order.find();
+
+      return orders;
+    } catch (error) {
+      throw APIError.unexpectedServerError('getOrders');
+    }
+  }
 }
 
 export default new OrderService();

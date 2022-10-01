@@ -7,4 +7,6 @@ const route = Routes.ORDER;
 
 router.post(Routes.ROOT, OrderController.createNewOrder);
 
+router.get(Routes.ROOT, OrderController.getOrders);
+
 export default { router, route };
