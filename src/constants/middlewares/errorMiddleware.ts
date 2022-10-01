@@ -1,7 +1,7 @@
 import APIError from '@/exceptions/apiError';
 import { Request, Response, NextFunction } from 'express';
 
-const errorMiddleware = (error, req: Request, res: Response, next: NextFunction) => {
+const errorMiddleware = (error: APIError | Error, req: Request, res: Response, next: NextFunction) => {
   console.error(error);
 
   if (error instanceof APIError) {

@@ -1,4 +1,5 @@
 import { SMTP_HOST, SMTP_PASSWORD, SMTP_PORT, SMTP_USER } from '@/env';
+import APIError from '@/exceptions/apiError';
 import nodemailer, { Transporter } from 'nodemailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport';
 
@@ -38,7 +39,7 @@ class MailService {
         `,
       });
     } catch (error) {
-      throw new Error(error);
+      throw APIError.unexpectedServerError('sendActivationEmail');
     }
   }
 }

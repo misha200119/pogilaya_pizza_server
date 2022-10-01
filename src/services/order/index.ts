@@ -1,15 +1,20 @@
 import NewOrder from '@/types/routes/order/newOrder';
 import Order from '@/db/models/order/model';
+import APIError from '@/exceptions/apiError';
 
 class OrderService {
   async createOrder(data: NewOrder) {
-    const { orderDetails, cart } = data;
+    try {
+      const { orderDetails, cart } = data;
 
-    const document = { ...orderDetails, cart, isPaid: false };
+      const fields = { ...orderDetails, cart, isPaid: false };
 
-    const newOrder = new Order(document);
+      const newOrder = new Order(fields);
 
-    await newOrder.save();
+      await newOrder.save();
+    } catch (error) {
+      throw APIError.unexpectedServerError('createOrder');
+    }
   }
 }
 

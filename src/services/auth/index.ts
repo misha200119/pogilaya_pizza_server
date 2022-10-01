@@ -7,13 +7,14 @@ import { v4 } from 'uuid';
 import MailService from '@/services/mail';
 import { API_URL, PORT } from '@/env';
 import { Routes } from '@/constants/routes';
+import APIError from '@/exceptions/apiError';
 
 class AuthService {
   async registration(login: string, password: string, role: Roles) {
     const existingUser = await User.findOne({ login });
 
     if (existingUser) {
-      throw new Error(`User with login: ${login} already exist`);
+      throw APIError.BadRequest(`User with login: ${login} already exist`);
     }
 
     const hashedPassword = await bcrypt.hash(password, 7);
@@ -45,7 +46,7 @@ class AuthService {
     const user = await User.findOne({ activationLink });
 
     if (!user) {
-      throw new Error('Incorrect activation link');
+      throw APIError.BadRequest('Incorrect activation link');
     }
 
     user.isActivated = true;
@@ -57,11 +58,11 @@ class AuthService {
     const user = await User.findOne({ login });
 
     if (!user) {
-      throw new Error(`User with login: ${login} does not exist`);
+      throw APIError.BadRequest(`User with login: ${login} does not exist`);
     }
     const isPasswordValid = bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      throw new Error(`Incorrect password`);
+      throw APIError.BadRequest(`Incorrect password`);
     }
 
     // await refreshTokenDocument.save();

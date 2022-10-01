@@ -5,13 +5,19 @@ import AuthService from '@/services/auth';
 import CookiesStorageKeys from '@/constants/controllers/auth/cookiesStorageKeys';
 import { thirtyDaysInMilliseconds } from '@/constants/controllers/auth/timeDescriptionInMilliseconds';
 import { CLIENT_PORT, CLIENT_URL } from '@/env';
+import { validationResult } from 'express-validator/src/validation-result';
+import APIError from '@/exceptions/apiError';
 
 class AuthController {
   async registration(req: Request, res: Response, next: NextFunction) {
-    const { data } = req.body as { data: LoginCredentials };
-    const { login, password } = data;
-
     try {
+      const errors = validationResult(req);
+
+      if (!errors.isEmpty()) {
+        return next(APIError.BadRequest('Registration validation error', errors.array()));
+      }
+      const { data } = req.body as { data: LoginCredentials };
+      const { login, password } = data;
       const userData = await AuthService.registration(login, password, Roles.USER);
 
       res.cookie(CookiesStorageKeys.REFRESH_TOKEN, userData.refreshToken, {
@@ -20,22 +26,22 @@ class AuthController {
       });
       return res.status(200).json(userData);
     } catch (error) {
-      return res.status(500).json({ error: 'Server error [regitation]' });
+      next(error);
     }
   }
 
   async login(req: Request, res: Response, next: NextFunction) {
-    const { data } = req.body as { data: LoginCredentials };
-    const { login, password } = data;
-
     try {
+      const { data } = req.body as { data: LoginCredentials };
+      const { login, password } = data;
+
       const { accesToken, refreshToken } = await AuthService.login(login, password);
       res.cookie(CookiesStorageKeys.REFRESH_TOKEN, refreshToken, {
         httpOnly: true,
       });
       return res.status(200).json({ accesToken, refreshToken });
     } catch (error) {
-      res.status(500).json({ error: 'Server error' });
+      next(error);
     }
   }
 
@@ -44,7 +50,7 @@ class AuthController {
       console.log('logout');
       return res.status(200).json('Ok');
     } catch (error) {
-      return res.status(500).json({ error: 'Server error' });
+      next(error);
     }
   }
 
@@ -57,7 +63,7 @@ class AuthController {
 
       return res.redirect(`${CLIENT_URL}:${CLIENT_PORT}`);
     } catch (error) {
-      return res.status(500).json({ error: 'Server error [activation]' });
+      next(error);
     }
   }
 }
