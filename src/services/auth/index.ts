@@ -1,11 +1,12 @@
 import Roles from '@/constants/db/models/user/roles';
 import User from '@/db/models/user/model';
-import { JWT_ACCES_SECRET_KEY } from '@/env';
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
-import RefreshToken from '@/db/models/refreshToken/model';
-import { resolve } from 'path';
-import { Response } from 'express';
+import TokenService from '@/services/token';
+import UserDTO from '@/dataTransferClasses/services/auth/userDTO';
+import { v4 } from 'uuid';
+import MailService from '@/services/mail';
+import { API_URL, PORT } from '@/env';
+import { Routes } from '@/constants/routes';
 
 class AuthService {
   async registration(login: string, password: string, role: Roles) {
@@ -16,14 +17,40 @@ class AuthService {
     }
 
     const hashedPassword = await bcrypt.hash(password, 7);
+    const activationLink = v4();
 
     const userCandidate = new User({
       login,
       password: hashedPassword,
       role,
+      isActivated: role === Roles.ADMIN,
+      activationLink,
     });
 
     await userCandidate.save();
+
+    if (role !== Roles.ADMIN) {
+      const _activationLink = `${API_URL}:${PORT}${Routes.AUTH}${Routes.ACTIVATION}/${activationLink}`;
+      await MailService.sendActivationEmail(login, _activationLink);
+    }
+
+    const tokens = await TokenService.generateTokens(userCandidate);
+    await TokenService.saveToken(userCandidate._id, tokens.refreshToken);
+    const userDTO = new UserDTO(userCandidate);
+
+    return { ...tokens, userDTO };
+  }
+
+  async activate(activationLink) {
+    const user = await User.findOne({ activationLink });
+
+    if (!user) {
+      throw new Error('Incorrect activation link');
+    }
+
+    user.isActivated = true;
+
+    await user.save();
   }
 
   async login(login: string, password: string) {
@@ -37,16 +64,12 @@ class AuthService {
       throw new Error(`Incorrect password`);
     }
 
-    const isAdmin = user.role === Roles.ADMIN;
-    const accesToken = jwt.sign({ id: user._id, isAdmin }, JWT_ACCES_SECRET_KEY, { expiresIn: '1h' });
-    const refreshToken = jwt.sign({ id: user._id, isAdmin }, JWT_ACCES_SECRET_KEY, { expiresIn: '30d' });
+    // await refreshTokenDocument.save();
 
-    const refreshTokenDocument = new RefreshToken({ user: user._id, refreshToken });
-
-    await refreshTokenDocument.save();
-
-    return { accesToken, refreshToken };
+    // return { accesToken, refreshToken };
   }
+
+  // async logout() {}
 }
 
 export default new AuthService();

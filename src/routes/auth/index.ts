@@ -7,6 +7,8 @@ const route = Routes.AUTH;
 
 router.post(Routes.REGISTRATION, AuthController.registration);
 
+router.get(`${Routes.ACTIVATION}/:link`, AuthController.activation);
+
 router.post(Routes.LOGIN, AuthController.login);
 
 router.post(Routes.LOGOUT, AuthController.logout);

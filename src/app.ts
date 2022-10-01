@@ -10,6 +10,7 @@ import Roles from './constants/db/models/user/roles';
 import bcrypt from 'bcrypt';
 import middlewares from '@/constants/middlewares';
 import AuthService from '@/services/auth';
+import errorMiddleware from '@/constants/middlewares/errorMiddleware';
 class App {
   public app: express.Application;
   public env: string;
@@ -20,10 +21,12 @@ class App {
     this.env = NODE_ENV || 'development';
     this.port = PORT || 3000;
 
+    // important !!! initilaize error middleware always must be last
     dbConnect()
       .then(async () => {
         this.initializeMiddlewares();
         this.initializeRoutes();
+        this.initilaizeErrorMiddleware();
         await this.initializeAdminAccout();
       })
       .catch(e => {
@@ -54,6 +57,10 @@ class App {
     middlewares.forEach(middleware => this.app.use(middleware));
   }
 
+  private initilaizeErrorMiddleware() {
+    this.app.use(errorMiddleware);
+  }
+
   private initializeRoutes() {
     expressRouters.forEach(_router => {
       const { route, router } = _router;
@@ -68,7 +75,13 @@ class App {
 
       if (!existingAdmin) {
         await AuthService.registration(ADMIN_EMAIL, ADMIN_PWD, Roles.ADMIN);
+        return;
       }
+
+      existingAdmin.login = ADMIN_EMAIL;
+      existingAdmin.password = await bcrypt.hash(ADMIN_PWD, 7);
+
+      await existingAdmin.save();
     } catch (e) {
       console.log(e);
     }

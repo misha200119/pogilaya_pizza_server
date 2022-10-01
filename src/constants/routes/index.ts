@@ -5,4 +5,6 @@ export enum Routes {
   REGISTRATION = '/registration',
   LOGIN = '/login',
   LOGOUT = '/logot',
+  TOKEN = '/token',
+  ACTIVATION = '/activation',
 }

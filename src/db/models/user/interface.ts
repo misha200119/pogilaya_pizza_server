@@ -6,6 +6,8 @@ interface IUser {
   login: string;
   password: string;
   role: Roles;
+  isActivated: boolean;
+  activationLink: string;
 }
 
 export default IUser;
