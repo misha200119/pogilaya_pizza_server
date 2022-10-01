@@ -8,6 +8,7 @@ import MailService from '@/services/mail';
 import { API_URL, PORT } from '@/env';
 import { Routes } from '@/constants/routes';
 import APIError from '@/exceptions/apiError';
+import JWTPayload from '@/types/services/token/jwtPayload';
 
 class AuthService {
   async registration(login: string, password: string, role: Roles) {
@@ -60,17 +61,48 @@ class AuthService {
     if (!user) {
       throw APIError.BadRequest(`User with login: ${login} does not exist`);
     }
-    const isPasswordValid = bcrypt.compare(password, user.password);
+
+    const isPasswordValid = bcrypt.compareSync(password, user.password);
+
     if (!isPasswordValid) {
       throw APIError.BadRequest(`Incorrect password`);
     }
 
-    // await refreshTokenDocument.save();
+    const tokens = await TokenService.generateTokens(user);
+    await TokenService.saveToken(user._id, tokens.refreshToken);
 
-    // return { accesToken, refreshToken };
+    const userDTO = new UserDTO(user);
+
+    return { ...tokens, userDTO };
   }
 
-  // async logout() {}
+  async logout(refreshToken: string) {
+    const token = await TokenService.removeToken(refreshToken);
+
+    return token;
+  }
+
+  async refresh(refreshToken: string) {
+    if (!refreshToken) {
+      throw APIError.UnauthorizedError();
+    }
+
+    const userDecodedData = (await TokenService.validateRefreshToken(refreshToken)) as JWTPayload;
+    const tokenFromDB = await TokenService.findToken(refreshToken);
+
+    if (!userDecodedData || !tokenFromDB) {
+      throw APIError.UnauthorizedError();
+    }
+
+    const user = await User.findById(userDecodedData.id);
+
+    const tokens = await TokenService.generateTokens(user);
+    await TokenService.saveToken(user._id, tokens.refreshToken);
+
+    const userDTO = new UserDTO(user);
+
+    return { ...tokens, userDTO };
+  }
 }
 
 export default new AuthService();

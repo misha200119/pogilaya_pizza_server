@@ -11,8 +11,10 @@ router.post(Routes.REGISTRATION, loginValidationMiddleware, passwordValidationMi
 
 router.get(`${Routes.ACTIVATION}/:link`, AuthController.activation);
 
-router.post(Routes.LOGIN, AuthController.login);
+router.post(Routes.LOGIN, loginValidationMiddleware, passwordValidationMiddleware, AuthController.login);
 
 router.post(Routes.LOGOUT, AuthController.logout);
+
+router.post(Routes.REFRESH, AuthController.refresh);
 
 export default { router, route };
