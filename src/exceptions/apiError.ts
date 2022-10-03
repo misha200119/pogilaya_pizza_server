@@ -18,7 +18,11 @@ export default class APIError extends Error {
     return new APIError(400, message, errors);
   }
 
-  static unexpectedServerError(message: string) {
+  static UnexpectedServerError(message: string) {
     return new APIError(500, `Unexpected server error on[${message}]`);
+  }
+
+  static NotAminError() {
+    return new APIError(403, "User don't have permission [ADMIN role] for this");
   }
 }

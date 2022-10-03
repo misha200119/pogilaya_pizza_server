@@ -13,7 +13,7 @@ class OrderService {
 
       await newOrder.save();
     } catch (error) {
-      throw APIError.unexpectedServerError('createOrder');
+      throw APIError.UnexpectedServerError('createOrder');
     }
   }
 
@@ -23,7 +23,7 @@ class OrderService {
 
       return orders;
     } catch (error) {
-      throw APIError.unexpectedServerError('getOrders');
+      throw APIError.UnexpectedServerError('getOrders');
     }
   }
 }

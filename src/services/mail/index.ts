@@ -39,7 +39,7 @@ class MailService {
         `,
       });
     } catch (error) {
-      throw APIError.unexpectedServerError('sendActivationEmail');
+      throw APIError.UnexpectedServerError('sendActivationEmail');
     }
   }
 }

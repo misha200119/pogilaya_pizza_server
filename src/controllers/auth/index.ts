@@ -50,6 +50,7 @@ class AuthController {
       if (!errors.isEmpty()) {
         return next(APIError.BadRequest('Login validation error', errors.array()));
       }
+
       const { data } = req.body as { data: LoginCredentials };
       const { login, password } = data;
       const userData = await AuthService.login(login, password);
