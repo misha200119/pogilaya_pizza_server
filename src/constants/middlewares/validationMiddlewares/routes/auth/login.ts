@@ -1,3 +1,3 @@
 import { body } from 'express-validator';
 
-export default body('data.login').isEmail();
+export default body('auth.login').isEmail();

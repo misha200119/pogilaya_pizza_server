@@ -22,7 +22,7 @@ export default class APIError extends Error {
     return new APIError(500, `Unexpected server error on[${message}]`);
   }
 
-  static NotAminError() {
+  static NotAdminError() {
     return new APIError(403, "User don't have permission [ADMIN role] for this");
   }
 }

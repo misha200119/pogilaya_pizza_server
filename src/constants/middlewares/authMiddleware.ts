@@ -25,7 +25,7 @@ const authMiddleware = async (req: Request & { userData: JWTPayload }, response:
 
     req.userData = userData;
 
-    next(req);
+    return next();
   } catch (error) {
     return next(APIError.UnauthorizedError());
   }

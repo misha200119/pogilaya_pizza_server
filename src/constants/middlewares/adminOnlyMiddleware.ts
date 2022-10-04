@@ -6,11 +6,13 @@ const adminOnlyMiddleware = async (req: Request & { userData: JWTPayload }, resp
   try {
     const { userData } = req;
 
-    console.log('admin only middleware');
+    if (!userData.isAdmin) {
+      return next(APIError.NotAdminError());
+    }
 
-    next(req);
+    next();
   } catch (error) {
-    return next(APIError.NotAminError());
+    return next(APIError.NotAdminError());
   }
 };
 

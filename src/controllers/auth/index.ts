@@ -16,8 +16,8 @@ class AuthController {
       if (!errors.isEmpty()) {
         return next(APIError.BadRequest('Registration validation error', errors.array()));
       }
-      const { data } = req.body as { data: LoginCredentials };
-      const { login, password } = data;
+      const { auth } = req.body as { auth: LoginCredentials };
+      const { login, password } = auth;
       const userData = await AuthService.registration(login, password, Roles.USER);
 
       res.cookie(CookiesStorageKeys.REFRESH_TOKEN, userData.refreshToken, {
@@ -51,8 +51,8 @@ class AuthController {
         return next(APIError.BadRequest('Login validation error', errors.array()));
       }
 
-      const { data } = req.body as { data: LoginCredentials };
-      const { login, password } = data;
+      const { auth } = req.body as { auth: LoginCredentials };
+      const { login, password } = auth;
       const userData = await AuthService.login(login, password);
 
       res.cookie(CookiesStorageKeys.REFRESH_TOKEN, userData.refreshToken, {
