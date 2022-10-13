@@ -1,4 +1,3 @@
-import { Moment } from 'moment';
 import DeliveryType from '@/interfaces/db/deliveryType';
 
 /**
