@@ -8,10 +8,10 @@ import { ObjectId } from 'mongoose';
 class TokenService {
   async generateTokens(user: UserInteface) {
     const isAdmin = user.role === Roles.ADMIN;
-    const accesToken = jwt.sign({ id: user._id, isAdmin, isActivated: user.isActivated }, JWT_ACCES_SECRET_KEY, { expiresIn: '1h' });
+    const accessToken = jwt.sign({ id: user._id, isAdmin, isActivated: user.isActivated }, JWT_ACCES_SECRET_KEY, { expiresIn: '1h' });
     const refreshToken = jwt.sign({ id: user._id, isAdmin, isActivated: user.isActivated }, JWT_ACCES_SECRET_KEY, { expiresIn: '30d' });
 
-    return { accesToken, refreshToken };
+    return { accessToken, refreshToken };
   }
 
   async saveToken(userId: ObjectId, refreshToken: string) {

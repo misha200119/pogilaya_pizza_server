@@ -15,6 +15,6 @@ router.post(Routes.LOGIN, loginValidationMiddleware, passwordValidationMiddlewar
 
 router.post(Routes.LOGOUT, AuthController.logout);
 
-router.post(Routes.REFRESH, AuthController.refresh);
+router.get(Routes.REFRESH, AuthController.refresh);
 
 export default { router, route };
