@@ -1,7 +1,7 @@
 {
   "name": "pogilaya_pizza_server",
   "version": "0.0.0",
-  "description": "TypeScript + MongoDB + TypeORM + Express API Server",
+  "description": "TypeScript + MongoDB + Express API Server",
   "author": "",
   "license": "ISC",
   "scripts": {

@@ -1,5 +1,6 @@
 export enum Routes {
   ROOT = '/',
+
   ORDER = '/order',
 
   AUTH = '/auth',
@@ -8,4 +9,7 @@ export enum Routes {
   LOGIN = '/login',
   LOGOUT = '/logout',
   REFRESH = '/refresh',
+
+  ADMIN = '/admin',
+  ANALITICS = '/analitics',
 }
