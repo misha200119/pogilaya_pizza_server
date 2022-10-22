@@ -1,5 +1,4 @@
 import DeliveryType from '@/interfaces/db/deliveryType';
-import { Moment } from 'moment-timezone';
 
 /**
  * When you put some value to date to create new document in bd just
