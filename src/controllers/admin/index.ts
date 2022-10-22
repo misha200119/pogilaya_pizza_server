@@ -4,7 +4,7 @@ import AdminService from '@/services/admin';
 class AdminController {
   async getAnalitics(req: Request, res: Response, next: NextFunction) {
     try {
-      const analiticsData = AdminService.getAnaliticsData();
+      const analiticsData = await AdminService.getAnaliticsData();
 
       return res.json(analiticsData);
     } catch (error) {
