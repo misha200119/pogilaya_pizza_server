@@ -22,7 +22,7 @@ class AdminService {
       mapAnaliticsData.get(currentDay).push(order);
     });
 
-    return mapAnaliticsData;
+    return [...mapAnaliticsData].sort((d1, d2) => d1[0].localeCompare(d2[0]));
   }
 }
 

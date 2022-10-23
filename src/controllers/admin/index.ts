@@ -6,7 +6,7 @@ class AdminController {
     try {
       const analiticsData = await AdminService.getAnaliticsData();
 
-      return res.json([...analiticsData]);
+      return res.json(analiticsData);
     } catch (error) {
       next(error);
     }
