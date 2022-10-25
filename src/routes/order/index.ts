@@ -12,4 +12,8 @@ router.post(Routes.ROOT, dataValidationMiddleware, authMiddleware, OrderControll
 
 router.get(Routes.ROOT, authMiddleware, adminOnlyMiddleware, OrderController.getOrders);
 
+router.patch(`${Routes.ROOT}:id`, authMiddleware, adminOnlyMiddleware, OrderController.patchOrder);
+
+router.delete(`${Routes.ROOT}:id`, authMiddleware, adminOnlyMiddleware, OrderController.deleteOrder);
+
 export default { router, route };

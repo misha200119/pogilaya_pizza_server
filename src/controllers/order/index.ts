@@ -32,6 +32,29 @@ class OrderController {
       next(error);
     }
   }
+
+  async patchOrder(req: Request, res: Response, next: NextFunction) {
+    try {
+      const orderID = req.params.id;
+
+      const order = await OrderService.patchOrder(orderID, req.body);
+
+      return res.status(200).json(order);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async deleteOrder(req: Request, res: Response, next: NextFunction) {
+    try {
+      const orderID = req.params.id;
+
+      await OrderService.deleteOrder(orderID);
+
+      return res.status(200).json('OK');
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
 export default new OrderController();
