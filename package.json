@@ -17,6 +17,8 @@
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "@swc/cli": "^0.1.57",
+    "@swc/core": "^1.2.220",
     "class-validator": "^0.13.2",
     "compression": "^1.7.4",
     "cookie-parser": "^1.4.6",
@@ -38,8 +40,6 @@
     "winston-daily-rotate-file": "^4.7.1"
   },
   "devDependencies": {
-    "@swc/cli": "^0.1.57",
-    "@swc/core": "^1.2.220",
     "@types/bcrypt": "^5.0.0",
     "@types/compression": "^1.7.2",
     "@types/cookie-parser": "^1.4.3",
