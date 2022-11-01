@@ -22,3 +22,5 @@ export const {
   CLIENT_URL,
   CLIENT_PORT,
 } = env;
+
+export const isProd = NODE_ENV === 'development';

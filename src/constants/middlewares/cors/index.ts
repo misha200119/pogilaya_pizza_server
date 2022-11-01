@@ -1,7 +1,7 @@
 import cors from 'cors';
-import { CLIENT_URL, CLIENT_PORT } from '@/env';
+import { CLIENT_URL, CLIENT_PORT, isProd } from '@/env';
 
 export default cors({
   credentials: true,
-  origin: `${CLIENT_URL}:${CLIENT_PORT}`,
+  origin: isProd ? CLIENT_URL : `${CLIENT_URL}:${CLIENT_PORT}`,
 });
