@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import express from 'express';
 import helmet from 'helmet';
 import hpp from 'hpp';
-import { ADMIN_EMAIL, ADMIN_PWD, NODE_ENV, PORT } from '@/env';
+import { ADMIN_EMAIL, ADMIN_PWD, isProd, NODE_ENV, PORT } from '@/env';
 import { expressRouters } from '@/constants/routers';
 import dbConnect from '@/db';
 import User from './db/models/user/model';
@@ -36,6 +36,7 @@ class App {
 
   public async listen() {
     this.app.listen(this.port, () => {
+      console.log(`is NODE_ENV = ${NODE_ENV} isProd = ${isProd}`);
       console.log(`=================================`);
       console.log(`======= ENV: ${this.env} ========`);
       console.log(`🚀 App listening on the port ${this.port}`);
