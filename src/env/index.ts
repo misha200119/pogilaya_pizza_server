@@ -24,3 +24,5 @@ export const {
 } = env;
 
 export const isProd = NODE_ENV === 'production';
+
+export const CORSAllowedURLs = ['https://pogilaya-pizza-front-end.herokuapp.com'];
